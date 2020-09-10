@@ -1,0 +1,26 @@
+<html>
+    <meta name="dj4e" content="b2330fc4531de135266de49078c270dd">
+
+    <meta name="dj4e-code" content="42159817866090">
+    <title>Login</title>
+<head>
+    <h1>Login to participate in the beatiful conversation</h1>
+<body>
+    {%if forms.errors%}
+        <p>Your username or password did not match.Or, Perhaps, I did something wrong.</p>
+    {%endif%}
+    {% if next %}
+        {%if user.is_auntheficated %}
+            <p> You've just entered the system</p>
+        {% else %}
+        <p>Please login to make a strategy</p>
+        {%endif%}
+    {%endif%}
+    <form method = 'post' action = "{% url 'login' %}">
+    {% csrf_token %}
+    {{form.as_p}}
+    <input type = "submit" class = "btn btn-primary" value = "Login"/>
+    <input type="hidden" name="next" value="{{next}}" />
+    </form>
+</body>
+</html>

@@ -1,0 +1,43 @@
+{% extends 'base_bootstrap.html' %}
+{% block content %}
+<h1> Welcome to the chat for everybody </h1>
+<form method="post">
+    {% csrf_token %}
+    <input type='text' name = 'message' size="60"/>
+    <input type = 'submit' value = 'Send'/>
+    <input type = 'reset'  value="Reset"/>
+    <a href="{% url 'logout' %}?next={% url 'kchat:talk' %}">Logout</a>
+    </p>    
+</form>
+
+<div id = "chatcontent">
+    Loading some messages...
+</div>
+
+</p>
+<label for='users'>You can write private messages to :</label>
+
+<ul id='users'>
+    {% for user in user_list %}
+        <li><a href="{% url 'kchat:privatetalk' user.id %}">{{user.username}}</a></li>
+    {% endfor %}
+<script type="text/javascript">
+    function updateMsg() {
+        console.log('Requesting Json');
+        $.getJSON("{% url 'kchat:messages' %}" , function(rowz){
+            console.log('JSON',rowz);
+            $('#chatcontent').empty();
+            for (var i = 0; i<rowz.length; i++){
+                arow = rowz[i];
+                $('#chatcontent').append('<p>'+ arow[0] + '<br/>' + arow[1] + "</p>\n");
+
+            }
+            setTimeout('updateMsg()', 1000);
+        });
+    }
+    $(document).ready(function(){
+        $.ajaxSetup({cache:false});
+        updateMsg();
+    });
+</script>
+{% endblock %}
